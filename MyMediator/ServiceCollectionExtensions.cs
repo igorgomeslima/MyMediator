@@ -15,13 +15,12 @@ namespace MyMediator
             var commandHandlerBaseType = typeof(ICommandHandler<,>);
 
             var commandTypes = commandHandlersAssemblies
-                .SelectMany(assembly => assembly.ExportedTypes)
-                .Where(type => type.IsAssignableToGenericType(commandHandlerBaseType) && !type.IsInterface);
+                .SelectMany(s => s.ExportedTypes)
+                .Where(w => w.GetInterfaces().Any(a => a.IsGenericType && a.Name == commandHandlerBaseType.Name));
 
             foreach (var commandType in commandTypes)
             {
                 var @interface = commandType.GetInterface(commandHandlerBaseType.Name);
-
                 serviceCollection.AddTransient(@interface, commandType);
             }
 
