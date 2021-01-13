@@ -16,7 +16,9 @@ namespace MyMediator
 
             var commandTypes = commandHandlersAssemblies
                 .SelectMany(s => s.ExportedTypes)
-                .Where(w => w.GetInterfaces().Any(a => a.IsGenericType && a.Name == commandHandlerBaseType.Name));
+                .Where(w =>
+                   w.GetInterfaces().Any(a => a.IsGenericType && a.GetGenericTypeDefinition() == commandHandlerBaseType)
+                );
 
             foreach (var commandType in commandTypes)
             {

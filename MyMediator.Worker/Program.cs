@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MyMediator.Worker.Commands;
+using MyMediator.Handlers;
+using MyMediator.Commands;
+using MyMediator.Worker.CommandsHandlers;
 
 namespace MyMediator.Worker
 {
@@ -22,7 +25,9 @@ namespace MyMediator.Worker
                     services.AddHostedService<Worker>();
 
                     services.AddTransient<IMyMediator, MyMediator>();
-                    services.AddMyMediator(new[] { typeof(MyCommand).Assembly });
+                    //services.AddMyMediator(new[] { typeof(MyCommand).Assembly });
+
+                    services.AddSingleton<ICommandHandler<MyCommand, string>, MyCommandHandler>();
                 });
     }
 }

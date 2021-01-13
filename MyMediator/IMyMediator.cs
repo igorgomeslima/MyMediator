@@ -2,6 +2,7 @@
 using MyMediator.Commands;
 using MyMediator.Handlers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MyMediator
 {
@@ -30,8 +31,11 @@ namespace MyMediator
             //var handleResult = await (Task<TResult>)handler.GetType().GetMethod("HandleAsync").Invoke(handler, new[] { command });
             //return handleResult;
 
-            var handler = (dynamic)_serviceProvider.GetService(requestCommandHandlerType);
-            var handleResult = await (Task<TResult>)handler.HandleAsync((dynamic)command);
+            //var handler = (dynamic)_serviceProvider.GetService(requestCommandHandlerType);
+            //var handleResult = await (Task<TResult>)handler.HandleAsync((dynamic)command);
+
+            var handler = _serviceProvider.GetService<ICommandHandler<ICommand<TResult>, TResult>>();
+            var handleResult = await (Task<TResult>)handler.HandleAsync(command);
 
             return handleResult;
         }
